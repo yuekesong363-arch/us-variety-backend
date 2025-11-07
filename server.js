@@ -11,11 +11,11 @@ import authRouter from "./routes/auth.js";
 import healthRouter from "./routes/health.js";
 import varietyRouter from "./routes/variety.js";
 import logsRouter from "./routes/logs.js";
+import dbCheckRouter from "./routes/dbCheck.js"; // ✅ 新增导入
 import requestLogger from "./middlewares/requestLogger.js";
 
 const app = express();
 
-// 基础中间件
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
@@ -34,8 +34,9 @@ app.get("/", (req, res) => {
       <h1>🎉 Backend Server is Running Successfully!</h1>
       <p>✅ 当前环境: Render Cloud</p>
       <p>🔗 Health Check: <a href="/api/health">/api/health</a></p>
+      <p>🧩 DB Check: <a href="/api/db-check">/api/db-check</a></p>
       <p>🗃️ Variety Data API: <a href="/api/variety">/api/variety</a></p>
-      <p>🧩 Logs API: <a href="/api/logs">/api/logs</a></p>
+      <p>🧾 Logs API: <a href="/api/logs">/api/logs</a></p>
       <hr/>
       <p style="color:gray;">Powered by Express & PostgreSQL</p>
     </div>
@@ -47,8 +48,9 @@ app.use("/api/auth", authRouter);
 app.use("/api/health", healthRouter);
 app.use("/api/variety", varietyRouter);
 app.use("/api/logs", logsRouter);
+app.use("/api/db-check", dbCheckRouter); // ✅ 新增注册
 
-// ✅ 错误兜底（防止未捕获异常导致崩溃）
+// ✅ 错误兜底
 app.use((err, req, res, next) => {
   console.error("UNHANDLED_ERROR:", err);
   res.status(500).json({ ok: false, message: "服务器异常" });
